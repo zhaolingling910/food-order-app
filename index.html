@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美味餐厅 - 在线点菜</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>美味餐厅</h1>
+        <p class="subtitle">精选美食，为你而来</p>
+        <button class="admin-entry-btn" onclick="openAdmin()">🛠️ 管理菜单</button>
+    </header>
+
+    <div class="container">
+        <!-- 分类导航 -->
+        <nav class="category-nav">
+            <button class="category-btn active" data-category="all">全部</button>
+            <button class="category-btn" data-category="hot">热菜</button>
+            <button class="category-btn" data-category="cold">凉菜</button>
+            <button class="category-btn" data-category="soup">汤类</button>
+            <button class="category-btn" data-category="staple">主食</button>
+            <button class="category-btn" data-category="drink">饮品</button>
+        </nav>
+
+        <div class="main-content">
+            <!-- 菜单列表 -->
+            <div class="menu-grid" id="menuGrid"></div>
+
+            <!-- 购物车 -->
+            <div class="cart-panel">
+                <h2>我的订单</h2>
+                <div class="cart-items" id="cartItems">
+                    <p class="empty-cart">还没有点菜哦~</p>
+                </div>
+                <div class="cart-footer">
+                    <div class="cart-total">
+                        <span>合计：</span>
+                        <span class="total-price" id="totalPrice">¥0.00</span>
+                    </div>
+                    <button class="order-btn" id="orderBtn" onclick="submitOrder()">下单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下单成功弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-icon">&#10004;</div>
+            <h2>下单成功！</h2>
+            <p>您的订单已提交，请耐心等待</p>
+            <div class="order-summary" id="orderSummary"></div>
+            <button class="modal-btn" onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 菜单管理面板 -->
+    <div class="modal-overlay admin-overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>🛠️ 菜单管理</h2>
+                <button class="admin-close" onclick="closeAdmin()">&#10005;</button>
+            </div>
+
+            <div class="admin-body">
+                <!-- 添加 / 编辑表单 -->
+                <div class="dish-form">
+                    <h3 id="formTitle">➕ 添加新菜品</h3>
+                    <div class="form-row">
+                        <label>菜名</label>
+                        <input type="text" id="dishName" placeholder="例如：清蒸鲈鱼">
+                    </div>
+                    <div class="form-row">
+                        <label>分类</label>
+                        <select id="dishCategory">
+                            <option value="hot">热菜</option>
+                            <option value="cold">凉菜</option>
+                            <option value="soup">汤类</option>
+                            <option value="staple">主食</option>
+                            <option value="drink">饮品</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>价格(¥)</label>
+                        <input type="number" id="dishPrice" min="0" step="1" placeholder="例如：68">
+                    </div>
+                    <div class="form-row">
+                        <label>描述</label>
+                        <input type="text" id="dishDesc" placeholder="例如：鲜嫩入味，老少皆宜">
+                    </div>
+                    <div class="form-row">
+                        <label>菜品图片</label>
+                        <div class="image-upload">
+                            <input type="file" id="dishImageInput" accept="image/*" onchange="handleImageSelect(this)">
+                            <div class="image-preview" id="imagePreview">
+                                <span class="no-image">未选择图片</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label>图标(可选)</label>
+                        <input type="text" id="dishEmoji" maxlength="2" placeholder="没有图片时显示的 emoji，如 🐟">
+                    </div>
+                    <div class="form-actions">
+                        <button class="save-dish-btn" id="saveDishBtn" onclick="saveDish()">添加菜品</button>
+                        <button class="cancel-edit-btn" id="cancelEditBtn" onclick="resetForm()" style="display:none">取消编辑</button>
+                    </div>
+                </div>
+
+                <!-- 已有菜品列表 -->
+                <div class="admin-list-section">
+                    <div class="admin-list-header">
+                        <h3>所有菜品</h3>
+                        <button class="reset-default-btn" onclick="resetToDefault()">恢复默认菜单</button>
+                    </div>
+                    <div class="admin-list" id="adminList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
