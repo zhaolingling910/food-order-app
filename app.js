@@ -1,31 +1,39 @@
-// 默认菜单数据（首次打开网页时使用）
+/* ---------- Supabase 连接 ---------- */
+
+// 这两个值是 Supabase 项目里的 anon/publishable 钥匙，专门给前端用、可以公开
+const SUPABASE_URL = "https://dzxtwekqimacugvszkxc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GpoiVwyQnLZNgOGqUuHb6A_TxY9a2-d";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ---------- 默认菜单（仅供「恢复默认菜单」按钮使用） ---------- */
+
 const defaultMenu = [
     // 热菜
-    { id: 1,  name: "宫保鸡丁",   emoji: "🍗", image: "", price: 38, category: "hot",    desc: "花生米配嫩滑鸡丁，香辣可口" },
-    { id: 2,  name: "麻婆豆腐",   emoji: "🫕", image: "", price: 28, category: "hot",    desc: "麻辣鲜香，下饭神器" },
-    { id: 3,  name: "红烧肉",     emoji: "🥩", image: "", price: 48, category: "hot",    desc: "肥而不腻，入口即化" },
-    { id: 4,  name: "糖醋排骨",   emoji: "🍖", image: "", price: 52, category: "hot",    desc: "酸甜适中，外酥里嫩" },
-    { id: 5,  name: "水煮鱼",     emoji: "🐟", image: "", price: 58, category: "hot",    desc: "鲜嫩鱼片，麻辣鲜香" },
-    { id: 6,  name: "回锅肉",     emoji: "🥓", image: "", price: 36, category: "hot",    desc: "经典川菜，肥瘦相间" },
+    { id: 1,  name: "宫保鸡丁",   emoji: "🍗", image: "", price: 38, category: "hot",    description: "花生米配嫩滑鸡丁，香辣可口" },
+    { id: 2,  name: "麻婆豆腐",   emoji: "🫕", image: "", price: 28, category: "hot",    description: "麻辣鲜香，下饭神器" },
+    { id: 3,  name: "红烧肉",     emoji: "🥩", image: "", price: 48, category: "hot",    description: "肥而不腻，入口即化" },
+    { id: 4,  name: "糖醋排骨",   emoji: "🍖", image: "", price: 52, category: "hot",    description: "酸甜适中，外酥里嫩" },
+    { id: 5,  name: "水煮鱼",     emoji: "🐟", image: "", price: 58, category: "hot",    description: "鲜嫩鱼片，麻辣鲜香" },
+    { id: 6,  name: "回锅肉",     emoji: "🥓", image: "", price: 36, category: "hot",    description: "经典川菜，肥瘦相间" },
     // 凉菜
-    { id: 7,  name: "凉拌黄瓜",   emoji: "🥒", image: "", price: 16, category: "cold",   desc: "爽脆可口，开胃小菜" },
-    { id: 8,  name: "皮蛋豆腐",   emoji: "🥚", image: "", price: 18, category: "cold",   desc: "滑嫩豆腐配松花蛋" },
-    { id: 9,  name: "口水鸡",     emoji: "🍗", image: "", price: 32, category: "cold",   desc: "麻辣鲜香，口水直流" },
-    { id: 10, name: "凉拌木耳",   emoji: "🍄", image: "", price: 18, category: "cold",   desc: "清爽木耳，健康美味" },
+    { id: 7,  name: "凉拌黄瓜",   emoji: "🥒", image: "", price: 16, category: "cold",   description: "爽脆可口，开胃小菜" },
+    { id: 8,  name: "皮蛋豆腐",   emoji: "🥚", image: "", price: 18, category: "cold",   description: "滑嫩豆腐配松花蛋" },
+    { id: 9,  name: "口水鸡",     emoji: "🍗", image: "", price: 32, category: "cold",   description: "麻辣鲜香，口水直流" },
+    { id: 10, name: "凉拌木耳",   emoji: "🍄", image: "", price: 18, category: "cold",   description: "清爽木耳，健康美味" },
     // 汤类
-    { id: 11, name: "番茄蛋汤",   emoji: "🍅", image: "", price: 15, category: "soup",   desc: "经典家常汤，酸甜暖胃" },
-    { id: 12, name: "紫菜蛋花汤", emoji: "🥣", image: "", price: 12, category: "soup",   desc: "清淡鲜美，营养丰富" },
-    { id: 13, name: "酸辣汤",     emoji: "🥘", image: "", price: 18, category: "soup",   desc: "酸辣开胃，暖身暖心" },
+    { id: 11, name: "番茄蛋汤",   emoji: "🍅", image: "", price: 15, category: "soup",   description: "经典家常汤，酸甜暖胃" },
+    { id: 12, name: "紫菜蛋花汤", emoji: "🥣", image: "", price: 12, category: "soup",   description: "清淡鲜美，营养丰富" },
+    { id: 13, name: "酸辣汤",     emoji: "🥘", image: "", price: 18, category: "soup",   description: "酸辣开胃，暖身暖心" },
     // 主食
-    { id: 14, name: "米饭",       emoji: "🍚", image: "", price: 3,  category: "staple", desc: "香喷喷白米饭" },
-    { id: 15, name: "炒饭",       emoji: "🍳", image: "", price: 18, category: "staple", desc: "蛋炒饭，粒粒分明" },
-    { id: 16, name: "炸酱面",     emoji: "🍜", image: "", price: 22, category: "staple", desc: "老北京风味，酱香浓郁" },
-    { id: 17, name: "饺子",       emoji: "🥟", image: "", price: 25, category: "staple", desc: "手工水饺，皮薄馅大" },
+    { id: 14, name: "米饭",       emoji: "🍚", image: "", price: 3,  category: "staple", description: "香喷喷白米饭" },
+    { id: 15, name: "炒饭",       emoji: "🍳", image: "", price: 18, category: "staple", description: "蛋炒饭，粒粒分明" },
+    { id: 16, name: "炸酱面",     emoji: "🍜", image: "", price: 22, category: "staple", description: "老北京风味，酱香浓郁" },
+    { id: 17, name: "饺子",       emoji: "🥟", image: "", price: 25, category: "staple", description: "手工水饺，皮薄馅大" },
     // 饮品
-    { id: 18, name: "柠檬水",     emoji: "🍋", image: "", price: 10, category: "drink",  desc: "清爽柠檬，冰凉解暑" },
-    { id: 19, name: "酸梅汤",     emoji: "🧃", image: "", price: 8,  category: "drink",  desc: "传统酸梅汤，生津止渴" },
-    { id: 20, name: "奶茶",       emoji: "🧋", image: "", price: 15, category: "drink",  desc: "丝滑奶茶，香浓醇厚" },
-    { id: 21, name: "可乐",       emoji: "🥤", image: "", price: 6,  category: "drink",  desc: "冰镇可乐，快乐水" },
+    { id: 18, name: "柠檬水",     emoji: "🍋", image: "", price: 10, category: "drink",  description: "清爽柠檬，冰凉解暑" },
+    { id: 19, name: "酸梅汤",     emoji: "🧃", image: "", price: 8,  category: "drink",  description: "传统酸梅汤，生津止渴" },
+    { id: 20, name: "奶茶",       emoji: "🧋", image: "", price: 15, category: "drink",  description: "丝滑奶茶，香浓醇厚" },
+    { id: 21, name: "可乐",       emoji: "🥤", image: "", price: 6,  category: "drink",  description: "冰镇可乐，快乐水" },
 ];
 
 // 分类（供管理面板使用）
@@ -37,51 +45,53 @@ const categories = [
     { value: "drink",  label: "饮品" },
 ];
 
-const STORAGE_KEY = "foodMenuData";
+/* ---------- 状态 ---------- */
 
-// 菜单数据：优先读取浏览器本地保存的，没有就用默认菜单
-let menuData = loadMenu();
-
-// 购物车
+let menuData = [];      // 启动时从 Supabase 加载
 const cart = {};
-
-// 当前分类
 let currentCategory = "all";
+let editingId = null;
+let pendingImage = "";
 
-// 管理面板状态
-let editingId = null;   // 正在编辑的菜品 id，null 表示新增
-let pendingImage = "";  // 表单里待保存的图片（data URL）
+/* ---------- 数据库读写 ---------- */
 
-/* ---------- 本地存储 ---------- */
-
-// 从浏览器本地读取菜单
-function loadMenu() {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length) return parsed;
-        }
-    } catch (e) {
-        console.warn("读取本地菜单失败，使用默认菜单", e);
+// 从 Supabase 读取菜单
+async function loadMenu() {
+    const { data, error } = await sb.from("menu").select("*").order("id");
+    if (error) {
+        console.error("加载菜单失败：", error);
+        alert("加载菜单失败：" + error.message);
+        return [];
     }
-    return defaultMenu.map(item => ({ ...item }));
+    return data || [];
 }
 
-// 把菜单保存到浏览器本地
-function saveMenu() {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(menuData));
-        return true;
-    } catch (e) {
-        alert("保存失败：浏览器存储空间不足，图片可能太大。请换一张小一点的图片再试。");
-        return false;
-    }
+async function insertDish(dish) {
+    const { error } = await sb.from("menu").insert(dish);
+    if (error) { alert("添加菜品失败：" + error.message); return false; }
+    return true;
+}
+
+async function updateDishInDb(id, fields) {
+    const { error } = await sb.from("menu").update(fields).eq("id", id);
+    if (error) { alert("保存修改失败：" + error.message); return false; }
+    return true;
+}
+
+async function deleteDishFromDb(id) {
+    const { error } = await sb.from("menu").delete().eq("id", id);
+    if (error) { alert("删除失败：" + error.message); return false; }
+    return true;
+}
+
+async function insertOrder(items, total) {
+    const { error } = await sb.from("orders").insert({ items, total });
+    if (error) { alert("下单失败：" + error.message); return false; }
+    return true;
 }
 
 /* ---------- 菜单渲染 ---------- */
 
-// 渲染菜单
 function renderMenu() {
     const grid = document.getElementById("menuGrid");
     const items = currentCategory === "all"
@@ -100,7 +110,7 @@ function renderMenu() {
                 : `<div class="item-emoji">${item.emoji || "🍽️"}</div>`}
             <div class="item-info">
                 <div class="item-name">${item.name}</div>
-                <div class="item-desc">${item.desc || ""}</div>
+                <div class="item-desc">${item.description || ""}</div>
                 <div class="item-bottom">
                     <span class="item-price">${item.price}</span>
                     <button class="add-btn" onclick="addToCart(${item.id})">+</button>
@@ -112,26 +122,18 @@ function renderMenu() {
 
 /* ---------- 购物车 ---------- */
 
-// 添加到购物车
 function addToCart(id) {
-    if (cart[id]) {
-        cart[id]++;
-    } else {
-        cart[id] = 1;
-    }
+    if (cart[id]) cart[id]++;
+    else cart[id] = 1;
     renderCart();
 }
 
-// 修改数量
 function changeQty(id, delta) {
     cart[id] += delta;
-    if (cart[id] <= 0) {
-        delete cart[id];
-    }
+    if (cart[id] <= 0) delete cart[id];
     renderCart();
 }
 
-// 渲染购物车
 function renderCart() {
     const container = document.getElementById("cartItems");
     const ids = Object.keys(cart);
@@ -174,8 +176,8 @@ function renderCart() {
     document.getElementById("totalPrice").textContent = `¥${total.toFixed(2)}`;
 }
 
-// 下单
-function submitOrder() {
+// 下单：写入 orders 表，再显示成功弹窗
+async function submitOrder() {
     const ids = Object.keys(cart);
     if (ids.length === 0) {
         alert("请先选择菜品！");
@@ -183,16 +185,36 @@ function submitOrder() {
     }
 
     let total = 0;
-    const summaryHTML = ids.map(id => {
+    const orderItems = ids.map(id => {
         const item = menuData.find(m => m.id === Number(id));
         const qty = cart[id];
         const subtotal = item.price * qty;
         total += subtotal;
-        return `<div class="order-summary-item">
-            <span>${item.emoji || "🍽️"} ${item.name} x${qty}</span>
-            <span>¥${subtotal}</span>
-        </div>`;
-    }).join("");
+        return {
+            id: Number(id),
+            name: item.name,
+            emoji: item.emoji || "",
+            price: item.price,
+            qty,
+            subtotal,
+        };
+    });
+
+    const orderBtn = document.getElementById("orderBtn");
+    orderBtn.disabled = true;
+    const originalText = orderBtn.textContent;
+    orderBtn.textContent = "提交中...";
+
+    const ok = await insertOrder(orderItems, total);
+
+    orderBtn.disabled = false;
+    orderBtn.textContent = originalText;
+    if (!ok) return;
+
+    const summaryHTML = orderItems.map(it => `<div class="order-summary-item">
+        <span>${it.emoji || "🍽️"} ${it.name} x${it.qty}</span>
+        <span>¥${it.subtotal}</span>
+    </div>`).join("");
 
     document.getElementById("orderSummary").innerHTML = summaryHTML +
         `<div class="order-summary-total">
@@ -206,26 +228,22 @@ function submitOrder() {
 // 关闭下单弹窗
 function closeModal() {
     document.getElementById("modalOverlay").classList.remove("show");
-    // 清空购物车
     Object.keys(cart).forEach(key => delete cart[key]);
     renderCart();
 }
 
 /* ---------- 菜单管理面板 ---------- */
 
-// 打开管理面板
 function openAdmin() {
     resetForm();
     renderAdminList();
     document.getElementById("adminOverlay").classList.add("show");
 }
 
-// 关闭管理面板
 function closeAdmin() {
     document.getElementById("adminOverlay").classList.remove("show");
 }
 
-// 清空表单，回到「新增」状态
 function resetForm() {
     editingId = null;
     pendingImage = "";
@@ -241,7 +259,6 @@ function resetForm() {
     updateImagePreview();
 }
 
-// 更新图片预览
 function updateImagePreview() {
     const preview = document.getElementById("imagePreview");
     if (pendingImage) {
@@ -251,7 +268,7 @@ function updateImagePreview() {
     }
 }
 
-// 选择图片：压缩后存为 data URL，节省浏览器存储空间
+// 选择图片：压缩后存为 data URL，节省数据库空间
 function handleImageSelect(input) {
     const file = input.files[0];
     if (!file) return;
@@ -265,7 +282,6 @@ function handleImageSelect(input) {
     reader.onload = e => {
         const img = new Image();
         img.onload = () => {
-            // 等比缩放到最长边 500px
             const maxSize = 500;
             let { width, height } = img;
             if (width > maxSize || height > maxSize) {
@@ -291,41 +307,40 @@ function handleImageSelect(input) {
 }
 
 // 保存菜品（新增或编辑）
-function saveDish() {
+async function saveDish() {
     const name = document.getElementById("dishName").value.trim();
     const category = document.getElementById("dishCategory").value;
     const price = parseFloat(document.getElementById("dishPrice").value);
-    const desc = document.getElementById("dishDesc").value.trim();
+    const description = document.getElementById("dishDesc").value.trim();
     const emoji = document.getElementById("dishEmoji").value.trim();
 
     if (!name) { alert("请填写菜名"); return; }
     if (isNaN(price) || price < 0) { alert("请填写正确的价格"); return; }
     if (!pendingImage && !emoji) { alert("请上传一张图片，或填写一个 emoji 图标"); return; }
 
+    const saveBtn = document.getElementById("saveDishBtn");
+    saveBtn.disabled = true;
+    const originalText = saveBtn.textContent;
+    saveBtn.textContent = "保存中...";
+
+    let ok;
     if (editingId !== null) {
-        // 编辑已有菜品
-        const item = menuData.find(m => m.id === editingId);
-        if (item) {
-            item.name = name;
-            item.category = category;
-            item.price = price;
-            item.desc = desc;
-            item.emoji = emoji;
-            item.image = pendingImage;
-        }
+        ok = await updateDishInDb(editingId, { name, category, price, description, emoji, image: pendingImage });
     } else {
-        // 新增菜品
         const newId = menuData.reduce((max, m) => Math.max(max, m.id), 0) + 1;
-        menuData.push({ id: newId, name, emoji, image: pendingImage, price, category, desc });
+        ok = await insertDish({ id: newId, name, emoji, image: pendingImage, price, category, description });
     }
 
-    if (!saveMenu()) return;
+    saveBtn.disabled = false;
+    saveBtn.textContent = originalText;
+    if (!ok) return;
+
+    menuData = await loadMenu();
     resetForm();
     renderAdminList();
     renderMenu();
 }
 
-// 点击「编辑」：把菜品填入表单
 function editDish(id) {
     const item = menuData.find(m => m.id === id);
     if (!item) return;
@@ -334,7 +349,7 @@ function editDish(id) {
     document.getElementById("dishName").value = item.name;
     document.getElementById("dishCategory").value = item.category;
     document.getElementById("dishPrice").value = item.price;
-    document.getElementById("dishDesc").value = item.desc || "";
+    document.getElementById("dishDesc").value = item.description || "";
     document.getElementById("dishEmoji").value = item.emoji || "";
     document.getElementById("dishImageInput").value = "";
     document.getElementById("formTitle").textContent = "✏️ 编辑菜品";
@@ -344,33 +359,40 @@ function editDish(id) {
     document.querySelector(".admin-body").scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// 删除菜品
-function deleteDish(id) {
+async function deleteDish(id) {
     const item = menuData.find(m => m.id === id);
     if (!item) return;
     if (!confirm(`确定删除「${item.name}」吗？`)) return;
-    menuData = menuData.filter(m => m.id !== id);
-    delete cart[id];                 // 购物车里也一并移除
+
+    const ok = await deleteDishFromDb(id);
+    if (!ok) return;
+
+    delete cart[id];
     if (editingId === id) resetForm();
-    if (!saveMenu()) return;
+    menuData = await loadMenu();
     renderAdminList();
     renderMenu();
     renderCart();
 }
 
-// 恢复成默认菜单
-function resetToDefault() {
-    if (!confirm("确定恢复成默认菜单吗？你添加和修改的所有菜品都会被清空。")) return;
-    menuData = defaultMenu.map(item => ({ ...item }));
+// 恢复默认菜单：清空数据库菜单表，再插入 21 道默认菜
+async function resetToDefault() {
+    if (!confirm("确定恢复成默认菜单吗？\n这会清空数据库里所有菜品（影响所有访客），然后重新插入 21 道默认菜品。")) return;
+
+    const { error: delErr } = await sb.from("menu").delete().neq("id", -1);
+    if (delErr) { alert("清空失败：" + delErr.message); return; }
+
+    const { error: insErr } = await sb.from("menu").insert(defaultMenu);
+    if (insErr) { alert("插入默认菜单失败：" + insErr.message); return; }
+
     Object.keys(cart).forEach(key => delete cart[key]);
-    saveMenu();
+    menuData = await loadMenu();
     resetForm();
     renderAdminList();
     renderMenu();
     renderCart();
 }
 
-// 渲染管理面板里的菜品列表
 function renderAdminList() {
     const list = document.getElementById("adminList");
     if (menuData.length === 0) {
@@ -409,4 +431,9 @@ document.querySelectorAll(".category-btn").forEach(btn => {
     });
 });
 
-renderMenu();
+// 启动：先显示「加载中」，再从数据库拉菜单
+document.getElementById("menuGrid").innerHTML = '<p class="empty-menu">加载中...</p>';
+loadMenu().then(data => {
+    menuData = data;
+    renderMenu();
+});
