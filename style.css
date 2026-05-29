@@ -702,6 +702,74 @@ header h1 {
     color: #e74c3c;
 }
 
+/* 选项卡 */
+.admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.admin-tab {
+    flex: 1;
+    padding: 9px 0;
+    background: #f5f5f5;
+    color: #666;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.admin-tab:hover {
+    color: #e74c3c;
+}
+
+.admin-tab.active {
+    background: #e74c3c;
+    color: white;
+}
+
+/* 订单记录 */
+.orders-list {
+    margin-top: 16px;
+}
+
+.order-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+
+.order-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-time {
+    font-size: 13px;
+    color: #999;
+}
+
+.order-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e74c3c;
+}
+
+.order-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #555;
+    padding: 3px 0;
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
     .main-content {

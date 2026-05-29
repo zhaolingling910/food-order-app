@@ -90,6 +90,18 @@ async function insertOrder(items, total) {
     return true;
 }
 
+// 读取所有订单（按下单时间倒序）
+async function loadOrders() {
+    const { data, error } = await sb.from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+    if (error) {
+        console.error("加载订单失败：", error);
+        return { data: [], error };
+    }
+    return { data: data || [], error: null };
+}
+
 /* ---------- 菜单渲染 ---------- */
 
 function renderMenu() {
@@ -237,6 +249,7 @@ function closeModal() {
 function openAdmin() {
     resetForm();
     renderAdminList();
+    switchAdminTab("menu");
     document.getElementById("adminOverlay").classList.add("show");
 }
 
@@ -417,6 +430,52 @@ function renderAdminList() {
             </div>
         </div>
     `).join("");
+}
+
+/* ---------- 订单记录 ---------- */
+
+function switchAdminTab(tab) {
+    document.querySelectorAll(".admin-tab").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+    });
+    document.getElementById("menuTab").style.display = tab === "menu" ? "" : "none";
+    document.getElementById("ordersTab").style.display = tab === "orders" ? "" : "none";
+    if (tab === "orders") renderOrders();
+}
+
+async function renderOrders() {
+    const list = document.getElementById("ordersList");
+    list.innerHTML = '<p class="empty-cart">加载中...</p>';
+
+    const { data, error } = await loadOrders();
+    if (error) {
+        list.innerHTML = `<p class="empty-cart">加载订单失败：${error.message}</p>`;
+        return;
+    }
+    if (data.length === 0) {
+        list.innerHTML = '<p class="empty-cart">还没有订单</p>';
+        return;
+    }
+
+    list.innerHTML = data.map(order => {
+        const time = new Date(order.created_at).toLocaleString("zh-CN", {
+            year: "numeric", month: "2-digit", day: "2-digit",
+            hour: "2-digit", minute: "2-digit",
+        });
+        const lines = (order.items || []).map(it => `
+            <div class="order-line">
+                <span>${it.emoji || "🍽️"} ${it.name} ×${it.qty}</span>
+                <span>¥${it.subtotal}</span>
+            </div>`).join("");
+        return `
+            <div class="order-card">
+                <div class="order-card-head">
+                    <span class="order-time">${time}</span>
+                    <span class="order-total">¥${Number(order.total).toFixed(2)}</span>
+                </div>
+                <div class="order-lines">${lines}</div>
+            </div>`;
+    }).join("");
 }
 
 /* ---------- 初始化 ---------- */

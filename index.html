@@ -65,6 +65,14 @@
             </div>
 
             <div class="admin-body">
+                <!-- 选项卡切换 -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="menu" onclick="switchAdminTab('menu')">菜单管理</button>
+                    <button class="admin-tab" data-tab="orders" onclick="switchAdminTab('orders')">订单记录</button>
+                </div>
+
+                <!-- 选项卡内容：菜单管理 -->
+                <div id="menuTab">
                 <!-- 添加 / 编辑表单 -->
                 <div class="dish-form">
                     <h3 id="formTitle">➕ 添加新菜品</h3>
@@ -116,6 +124,16 @@
                         <button class="reset-default-btn" onclick="resetToDefault()">恢复默认菜单</button>
                     </div>
                     <div class="admin-list" id="adminList"></div>
+                </div>
+                </div><!-- /菜单管理 -->
+
+                <!-- 选项卡内容：订单记录 -->
+                <div id="ordersTab" style="display:none">
+                    <div class="admin-list-header">
+                        <h3>所有订单</h3>
+                        <button class="reset-default-btn" onclick="renderOrders()">刷新</button>
+                    </div>
+                    <div class="orders-list" id="ordersList"></div>
                 </div>
             </div>
         </div>
