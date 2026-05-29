@@ -133,6 +133,15 @@
                         <h3>所有订单</h3>
                         <button class="reset-default-btn" onclick="renderOrders()">刷新</button>
                     </div>
+                    <div class="orders-toolbar">
+                        <div class="orders-filters">
+                            <button class="orders-filter-btn active" data-filter="all" onclick="setOrdersFilter('all')">全部</button>
+                            <button class="orders-filter-btn" data-filter="today" onclick="setOrdersFilter('today')">今天</button>
+                            <input type="date" id="orderDatePicker" class="orders-date" onchange="setOrdersDate(this.value)">
+                        </div>
+                        <button class="export-orders-btn" onclick="exportOrders()">导出 CSV</button>
+                    </div>
+                    <div class="orders-stats" id="ordersStats"></div>
                     <div class="orders-list" id="ordersList"></div>
                 </div>
             </div>

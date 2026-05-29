@@ -770,6 +770,120 @@ header h1 {
     padding: 3px 0;
 }
 
+/* 订单工具栏：筛选 + 导出 */
+.orders-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.orders-filters {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.orders-filter-btn {
+    padding: 5px 14px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.orders-filter-btn.active,
+.orders-filter-btn:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.orders-date {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: inherit;
+    color: #666;
+}
+
+.export-orders-btn {
+    padding: 6px 14px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.export-orders-btn:hover {
+    opacity: 0.9;
+}
+
+/* 订单统计 */
+.orders-stats {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #666;
+}
+
+.orders-stats b {
+    color: #e74c3c;
+}
+
+/* 订单状态 */
+.order-card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.order-status {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+.status-pending {
+    background: #fff4e5;
+    color: #e67e22;
+}
+
+.status-done {
+    background: #e8f8ef;
+    color: #27ae60;
+}
+
+.order-toggle-btn {
+    padding: 4px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.order-toggle-btn:hover {
+    border-color: #27ae60;
+    color: #27ae60;
+}
+
+.order-card.order-done {
+    opacity: 0.7;
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
     .main-content {

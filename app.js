@@ -52,6 +52,9 @@ const cart = {};
 let currentCategory = "all";
 let editingId = null;
 let pendingImage = "";
+let ordersData = [];        // 当前加载的全部订单
+let ordersFilter = "all";   // "all" | "today" | "date"
+let ordersDateValue = "";   // 当 ordersFilter === "date" 时的具体日期 YYYY-MM-DD
 
 /* ---------- 数据库读写 ---------- */
 
@@ -100,6 +103,13 @@ async function loadOrders() {
         return { data: [], error };
     }
     return { data: data || [], error: null };
+}
+
+// 更新订单状态（待处理 / 已完成）
+async function updateOrderStatus(id, status) {
+    const { error } = await sb.from("orders").update({ status }).eq("id", id);
+    if (error) { alert("更新订单状态失败：" + error.message); return false; }
+    return true;
 }
 
 /* ---------- 菜单渲染 ---------- */
@@ -443,21 +453,75 @@ function switchAdminTab(tab) {
     if (tab === "orders") renderOrders();
 }
 
+// 把任意时间转成本地的 YYYY-MM-DD，用于按天比较
+function localDateStr(d) {
+    const dt = new Date(d);
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, "0");
+    const day = String(dt.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
+function getFilteredOrders() {
+    if (ordersFilter === "today") {
+        const today = localDateStr(new Date());
+        return ordersData.filter(o => localDateStr(o.created_at) === today);
+    }
+    if (ordersFilter === "date" && ordersDateValue) {
+        return ordersData.filter(o => localDateStr(o.created_at) === ordersDateValue);
+    }
+    return ordersData;
+}
+
+function setOrdersFilter(f) {
+    ordersFilter = f;
+    if (f !== "date") {
+        ordersDateValue = "";
+        const picker = document.getElementById("orderDatePicker");
+        if (picker) picker.value = "";
+    }
+    document.querySelectorAll(".orders-filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === f);
+    });
+    renderOrdersList();
+}
+
+function setOrdersDate(value) {
+    if (!value) { setOrdersFilter("all"); return; }
+    ordersFilter = "date";
+    ordersDateValue = value;
+    document.querySelectorAll(".orders-filter-btn").forEach(btn => btn.classList.remove("active"));
+    renderOrdersList();
+}
+
 async function renderOrders() {
     const list = document.getElementById("ordersList");
     list.innerHTML = '<p class="empty-cart">加载中...</p>';
+    document.getElementById("ordersStats").innerHTML = "";
 
     const { data, error } = await loadOrders();
     if (error) {
         list.innerHTML = `<p class="empty-cart">加载订单失败：${error.message}</p>`;
         return;
     }
-    if (data.length === 0) {
-        list.innerHTML = '<p class="empty-cart">还没有订单</p>';
+    ordersData = data;
+    renderOrdersList();
+}
+
+function renderOrdersList() {
+    const list = document.getElementById("ordersList");
+    const stats = document.getElementById("ordersStats");
+    const orders = getFilteredOrders();
+
+    const revenue = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+    stats.innerHTML = `共 <b>${orders.length}</b> 单 · 营业额 <b>¥${revenue.toFixed(2)}</b>`;
+
+    if (orders.length === 0) {
+        list.innerHTML = '<p class="empty-cart">这个时间段还没有订单</p>';
         return;
     }
 
-    list.innerHTML = data.map(order => {
+    list.innerHTML = orders.map(order => {
         const time = new Date(order.created_at).toLocaleString("zh-CN", {
             year: "numeric", month: "2-digit", day: "2-digit",
             hour: "2-digit", minute: "2-digit",
@@ -467,15 +531,57 @@ async function renderOrders() {
                 <span>${it.emoji || "🍽️"} ${it.name} ×${it.qty}</span>
                 <span>¥${it.subtotal}</span>
             </div>`).join("");
+        const done = order.status === "done";
         return `
-            <div class="order-card">
+            <div class="order-card${done ? " order-done" : ""}">
                 <div class="order-card-head">
                     <span class="order-time">${time}</span>
                     <span class="order-total">¥${Number(order.total).toFixed(2)}</span>
                 </div>
                 <div class="order-lines">${lines}</div>
+                <div class="order-card-foot">
+                    <span class="order-status ${done ? "status-done" : "status-pending"}">${done ? "已完成" : "待处理"}</span>
+                    <button class="order-toggle-btn" onclick="toggleOrderDone(${order.id}, ${done})">${done ? "撤销" : "标记已完成"}</button>
+                </div>
             </div>`;
     }).join("");
+}
+
+async function toggleOrderDone(id, currentlyDone) {
+    const newStatus = currentlyDone ? "pending" : "done";
+    const ok = await updateOrderStatus(id, newStatus);
+    if (!ok) return;
+    const order = ordersData.find(o => o.id === id);
+    if (order) order.status = newStatus;
+    renderOrdersList();
+}
+
+function exportOrders() {
+    const orders = getFilteredOrders();
+    if (orders.length === 0) { alert("当前没有可导出的订单"); return; }
+
+    const rows = [["下单时间", "状态", "菜品明细", "总价"]];
+    orders.forEach(o => {
+        const time = new Date(o.created_at).toLocaleString("zh-CN");
+        const status = o.status === "done" ? "已完成" : "待处理";
+        const detail = (o.items || []).map(it => `${it.name}×${it.qty}`).join("；");
+        rows.push([time, status, detail, Number(o.total).toFixed(2)]);
+    });
+
+    // 加 BOM（﻿），Excel 打开中文不乱码
+    const csv = "﻿" + rows.map(r =>
+        r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+    ).join("\r\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `订单_${localDateStr(new Date())}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 /* ---------- 初始化 ---------- */
