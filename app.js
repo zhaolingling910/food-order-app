@@ -112,6 +112,13 @@ async function updateOrderStatus(id, status) {
     return true;
 }
 
+// 删除订单
+async function deleteOrderFromDb(id) {
+    const { error } = await sb.from("orders").delete().eq("id", id);
+    if (error) { alert("删除订单失败：" + error.message); return false; }
+    return true;
+}
+
 /* ---------- 菜单渲染 ---------- */
 
 function renderMenu() {
@@ -541,7 +548,10 @@ function renderOrdersList() {
                 <div class="order-lines">${lines}</div>
                 <div class="order-card-foot">
                     <span class="order-status ${done ? "status-done" : "status-pending"}">${done ? "已完成" : "待处理"}</span>
-                    <button class="order-toggle-btn" onclick="toggleOrderDone(${order.id}, ${done})">${done ? "撤销" : "标记已完成"}</button>
+                    <div class="order-actions">
+                        <button class="order-toggle-btn" onclick="toggleOrderDone(${order.id}, ${done})">${done ? "撤销" : "标记已完成"}</button>
+                        <button class="order-del-btn" onclick="deleteOrder(${order.id})">删除</button>
+                    </div>
                 </div>
             </div>`;
     }).join("");
@@ -553,6 +563,14 @@ async function toggleOrderDone(id, currentlyDone) {
     if (!ok) return;
     const order = ordersData.find(o => o.id === id);
     if (order) order.status = newStatus;
+    renderOrdersList();
+}
+
+async function deleteOrder(id) {
+    if (!confirm("确定删除这笔订单吗？删除后无法恢复。")) return;
+    const ok = await deleteOrderFromDb(id);
+    if (!ok) return;
+    ordersData = ordersData.filter(o => o.id !== id);
     renderOrdersList();
 }
 

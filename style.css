@@ -880,6 +880,27 @@ header h1 {
     color: #27ae60;
 }
 
+.order-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.order-del-btn {
+    padding: 4px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    border-radius: 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.order-del-btn:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
 .order-card.order-done {
     opacity: 0.7;
 }
